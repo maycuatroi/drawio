@@ -58,6 +58,7 @@ class DrawIOBrowser(DrawIO):
 
     def clear_canvas(self):
         self.select_all()
+        sleep(1)
         self.click_delete()
 
     def click_delete(self):
@@ -108,7 +109,7 @@ class DrawIOBrowser(DrawIO):
         buttons = self.__get_all_buttons()
 
         for button in buttons:
-            if button.text == name:
+            if button.text == name or button.get_attribute("title") == name:
                 button.click()
                 return True
         if not_found_ok:
@@ -158,3 +159,6 @@ class DrawIOBrowser(DrawIO):
             self.render_csv(draw_io_string)
         elif "type:text" in first_line:
             self.render_text(draw_io_string)
+
+    def click_copy(self):
+        self.click_menu_item("Edit", "Copy")
