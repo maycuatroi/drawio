@@ -25,5 +25,5 @@ class AbstractConfig:
                 value = json.dumps(value)
             config_string += f"# {key}: {value}\n"
         if column_names is not None:
-            config_string += f", ".join(column_names) + "\n"
+            config_string += ", ".join(column_names) + "\n"
         return config_string
