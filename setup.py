@@ -32,7 +32,7 @@ def read_requirements(path):
 setup(
     name="drawio",
     version=read("drawio", "VERSION"),
-    description="Awesome drawio created by maycuatroi",
+    description="Awesome drawio created by Nguyen Anh Binh",
     url="https://github.com/maycuatroi/drawio/",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",

@@ -1,0 +1,2 @@
+
+GLOBAL_GRAPH = None
