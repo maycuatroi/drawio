@@ -10,8 +10,8 @@ class Node:
     def __init__(self, name, shape="ellipse", color="black"):
         self.name = name
         self.id = uuid()
-        self.children: typing.List[Edge] = []
-        self.parents: typing.List[Edge] = []
+        self.children = []
+        self.parents = []
         self.shape = shape
         self.color = color
         self.graph = config.GLOBAL_GRAPH
@@ -24,7 +24,7 @@ class Node:
         """
         if isinstance(other, Node):
             return self.add_child(other)
-        elif isinstance(other,list):
+        elif isinstance(other, list):
             for node in other:
                 self.add_child(node)
         elif isinstance(other, str):

@@ -5,7 +5,7 @@ if typing.TYPE_CHECKING:
 
 
 class Edge:
-    def __init__(self, parent: "Node", child: "Node", label=None):
+    def __init__(self, parent: "Node", child: typing.Union["Node", None], label=None):
 
         self.label = label
         self.parent = parent
