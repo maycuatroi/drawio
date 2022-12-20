@@ -26,8 +26,14 @@ class Edge:
             return f"{self.parent.name}-->{self.child.name}"
 
     def __eq__(self, other):
+
+        child_name = self.child.name if self.child else None
+        other_child_name = other.child.name if other.child else None
+        parent_name = self.parent.name if self.parent else None
+        other_parent_name = other.parent.name if other.parent else None
+        label = self.label if self.label else None
         return (
-            self.parent.name == other.parent.name
-            and self.child.name == other.child.name
-            and self.label == other.label
+            child_name == other_child_name
+            and parent_name == other_parent_name
+            and label == other.label
         )

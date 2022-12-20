@@ -17,7 +17,8 @@ class Graph:
         self.edges = []
 
     def add_nodes(self, nodes):
-        self.nodes.extend(nodes)
+        for node in nodes:
+            self.add_node(node)
 
     def to_draw_io(self) -> str:
         """
@@ -102,7 +103,9 @@ class Graph:
             12,Extranet backend,server,Extranet server,
         """
 
-        graph_string = "## Build with Drawio-python\n# style: shape=%shape%\n"
+        graph_string = (
+            "## type:csv\n## Build with Drawio-python\n# style: shape=%shape%\n"
+        )
         graph_string += drawio_config.to_config_string()
 
         for node in self.nodes:
@@ -130,5 +133,6 @@ class Graph:
             self.edges.append(edge)
 
     def add_node(self, node):
+        node.graph = self
         if node not in self.nodes:
             self.nodes.append(node)

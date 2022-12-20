@@ -30,6 +30,7 @@ class Node:
         elif isinstance(other, str):
             child_edge = Edge(parent=self, child=None, label=other)
             self.children.append(child_edge)
+            self.graph.add_edge(child_edge)
             return child_edge
 
     def __sync_graph(self, other_node: "Node"):

@@ -21,14 +21,20 @@ class DrawIOBrowser(DrawIO):
         raise NoSuchElementException("Decide later not found")
 
     def _open(self):
-        self.driver = webdriver.Chrome(ChromeDriverManager().install())
-        self.driver.get("https://app.drawio.net/")
+        browser_user_dir = "/tmp/drawio-browser"
+        options = webdriver.ChromeOptions()
+        options.add_argument(f"--user-data-dir={browser_user_dir}")
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        self.driver.get("https://app.diagrams.net/")
         # wait to load span Decide later
-        decide_later_node = WebDriverWait(self.driver, 5).until(
-            lambda driver: self.__find_decide_later()
-        )
-        decide_later_node.click()
-
+        try:
+            decide_later_node = WebDriverWait(self.driver, 5).until(
+                lambda driver: self.__find_decide_later()
+            )
+            decide_later_node.click()
+        except Exception as e:
+            print(e)
+            pass
     def __click_insert_advance(self):
         sleep(1)
         self.driver.find_element(
@@ -63,12 +69,16 @@ class DrawIOBrowser(DrawIO):
         text_area = self.driver.find_element(By.TAG_NAME, "textarea")  # CSV text area
         # clear text area
         text_area.clear()
-        text_area.set_attribute("value", csv_string)
+        # text_area.set_attribute("value", csv_string)
+        script = f"""
+        var textArea = document.getElementsByTagName("textarea")[0];
+        textArea.value = `{csv_string}`;
+        """
+        self.driver.execute_script(script)
         self.__click_button("Import")
 
     def __init__(self):
         self.driver = None
-
         super().__init__()
 
     def render_text(self, text, render_style: str = "list"):
@@ -87,3 +97,10 @@ class DrawIOBrowser(DrawIO):
         self.driver.find_element(
             By.XPATH, "/html/body/div[11]/div/button[2]"
         ).click()  # Import
+
+    def render(self, draw_io_string):
+        first_line = draw_io_string.splitlines()[0]
+        if "type:csv" in first_line:
+            self.render_csv(draw_io_string)
+        elif "type:text" in first_line:
+            self.render_text(draw_io_string)

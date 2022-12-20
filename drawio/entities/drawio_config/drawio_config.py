@@ -14,7 +14,17 @@ class DrawIOConfig(AbstractConfig):
         self.edgespacing = 40
         self.layout = "auto"
         self.connect = []
-        self.column_names = []
+        self.column_names = [
+            "node_id",
+            "node_name",
+            "edge_label",
+            "shape",
+            "input_node",
+            "output_node",
+        ]
+        self.stylename = "shape"
+        self.styles = {}
+        self.add_connect(connect=ConnectConfig(from_id="node_id", to_id="output_node"))
         super().__init__(**kwargs)
 
     @property
