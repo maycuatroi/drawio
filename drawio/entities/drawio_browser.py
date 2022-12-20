@@ -1,3 +1,4 @@
+import os
 from time import sleep
 
 from selenium import webdriver
@@ -21,20 +22,47 @@ class DrawIOBrowser(DrawIO):
         raise NoSuchElementException("Decide later not found")
 
     def _open(self):
-        browser_user_dir = "/tmp/drawio-browser"
+        if os.name == "nt":
+            browser_user_dir = os.path.join(os.environ["LOCALAPPDATA"], "drawio")
+        else:
+            browser_user_dir = os.path.join(os.environ["HOME"], ".drawio")
         options = webdriver.ChromeOptions()
         options.add_argument(f"--user-data-dir={browser_user_dir}")
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         self.driver.get("https://app.diagrams.net/")
         # wait to load span Decide later
         try:
-            decide_later_node = WebDriverWait(self.driver, 5).until(
+            decide_later_node = WebDriverWait(self.driver, 2).until(
                 lambda driver: self.__find_decide_later()
             )
             decide_later_node.click()
         except Exception as e:
-            print(e)
-            pass
+            self.clear_canvas()
+
+    def __click_menu(self, button_name):
+        menu_buttons = self.driver.find_elements(By.CLASS_NAME, "geItem")
+        for menu_button in menu_buttons:
+            if menu_button.text == button_name:
+                menu_button.click()
+                return True
+
+    def click_menu_item(self, menu_name, item_name):
+        self.__click_menu(menu_name)
+        self.__click_pop_up_items(item_name)
+
+    def select_all(self):
+        """
+        Select all component by click "Edit" on menu bar and click Select All
+        """
+        self.click_menu_item("Edit", "Select All")
+
+    def clear_canvas(self):
+        self.select_all()
+        self.click_delete()
+
+    def click_delete(self):
+        self.click_button("Delete (Delete)", not_found_ok=True)
+
     def __click_insert_advance(self):
         sleep(1)
         self.driver.find_element(
@@ -53,12 +81,38 @@ class DrawIOBrowser(DrawIO):
     def __click_pop_up_items(self, name):
         WebDriverWait(self.driver, 5).until(lambda _: self.___action_click_popup(name))
 
-    def __click_button(self, name):
-        buttons = self.driver.find_elements(By.TAG_NAME, "button")
+    def __get_all_buttons(self):
+        """
+        buttons = (
+            self.driver.find_elements(By.CLASS_NAME, "geButton")
+            + self.driver.find_elements(By.CLASS_NAME, "geLabel")
+            + self.driver.find_elements(By.TAG_NAME, "button")
+        )
+        Convert it to while yield to avoid memory leak and get better performance
+
+        """
+
+        while True:
+            buttons = self.driver.find_elements(By.CLASS_NAME, "geButton")
+            for button in buttons:
+                yield button
+            buttons = self.driver.find_elements(By.CLASS_NAME, "geLabel")
+            for button in buttons:
+                yield button
+            button_ = self.driver.find_elements(By.TAG_NAME, "button")
+            for button in button_:
+                yield button
+            break
+
+    def click_button(self, name, not_found_ok=False):
+        buttons = self.__get_all_buttons()
+
         for button in buttons:
             if button.text == name:
                 button.click()
                 return True
+        if not_found_ok:
+            return False
         raise NoSuchElementException(f"{name} not found")
 
     def render_csv(self, csv_string):
@@ -75,7 +129,7 @@ class DrawIOBrowser(DrawIO):
         textArea.value = `{csv_string}`;
         """
         self.driver.execute_script(script)
-        self.__click_button("Import")
+        self.click_button("Import")
 
     def __init__(self):
         self.driver = None
