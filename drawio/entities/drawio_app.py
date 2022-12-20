@@ -38,8 +38,9 @@ class DrawIOApp(DrawIO):
         # print control
         self.window.print_control_identifiers()
 
-        #draw red rectangle
         # find "Insert (Doubleclick to insert text)"
-        insert_button = self.window.child_window(title="Insert (Doubleclick to insert text)")
+        insert_button = self.window.child_window(
+            title="Insert (Doubleclick to insert text)"
+        )
         # click
         insert_button.click_input()

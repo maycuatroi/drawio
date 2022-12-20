@@ -2,8 +2,8 @@ from drawio.entities.drawio_config.drawio_config import DrawIOConfig
 
 DRAWIO_SHAPES = {
     "function": "mxgraph.dfd.start",
-    "table":    "mxgraph.dfd.data",
-    "circle":   "ellipse",
+    "table": "mxgraph.dfd.data",
+    "circle": "ellipse",
 }
 
 
@@ -38,7 +38,7 @@ class Graph:
                 graph_string += f"{edge.parent.name}->{edge.child.name}\n"
         return graph_string
 
-    def to_draw_io_csv(self, drawio_config: DrawIOConfig = None) -> str:
+    def to_draw_io_csv(self, drawio_config: DrawIOConfig = DrawIOConfig()) -> str:
         """
         Returns a CSV string that can be used to draw the graph in draw.io
 
@@ -102,8 +102,6 @@ class Graph:
             12,Extranet backend,server,Extranet server,
         """
 
-        if drawio_config is None:
-            drawio_config = DrawIOConfig()
         graph_string = "## Build with Drawio-python\n# style: shape=%shape%\n"
         graph_string += drawio_config.to_config_string()
 
@@ -119,9 +117,11 @@ class Graph:
             if not child_edges:
                 graph_string += f"{node.id},{node.name},,\n"
             else:
-                #"node_id", "label", "edge_label", "shape", 'input_node', 'output_node'
+                # "node_id", "label", "edge_label", "shape", 'input_node', 'output_node'
                 # TODO: handle edge labels here
-                graph_string += f'{node.id},{node.name},,{shape},"{input_ids}","{output_ids}"\n'
+                graph_string += (
+                    f'{node.id},{node.name},,{shape},"{input_ids}","{output_ids}"\n'
+                )
 
         return graph_string
 

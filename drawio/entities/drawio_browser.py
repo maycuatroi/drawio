@@ -36,16 +36,16 @@ class DrawIOBrowser(DrawIO):
         ).click()  # Insert (Doubleclick to insert text)
         self.__click_pop_up_items("Advanced")
 
-    def __click_pop_up_items(self, name):
-        def _action():
-            pop_ups = self.driver.find_elements(By.CLASS_NAME, "mxPopupMenuItem")
-            for pop_up in pop_ups:
-                if pop_up.text == name:
-                    pop_up.click()
-                    return True
-            raise NoSuchElementException(f"{name} not found")
+    def ___action_click_popup(self, name):
+        pop_ups = self.driver.find_elements(By.CLASS_NAME, "mxPopupMenuItem")
+        for pop_up in pop_ups:
+            if pop_up.text == name:
+                pop_up.click()
+                return True
+        raise NoSuchElementException(f"{name} not found")
 
-        WebDriverWait(self.driver, 5).until(lambda _: _action())
+    def __click_pop_up_items(self, name):
+        WebDriverWait(self.driver, 5).until(lambda _: self.___action_click_popup(name))
 
     def __click_button(self, name):
         buttons = self.driver.find_elements(By.TAG_NAME, "button")
@@ -71,7 +71,7 @@ class DrawIOBrowser(DrawIO):
 
         super().__init__()
 
-    def render_text(self, text, type: str = "list"):
+    def render_text(self, text, render_style: str = "list"):
         self.__click_insert_advance()
         self.driver.find_element(
             By.XPATH, "/html/body/div[11]/table/tbody/tr[1]/td[2]"
@@ -82,7 +82,7 @@ class DrawIOBrowser(DrawIO):
         # clear text area
         text_area.clear()
         text_area.send_keys(text)
-        if type != "list":
+        if render_style != "list":
             raise NotImplementedError("Only list type is supported")
         self.driver.find_element(
             By.XPATH, "/html/body/div[11]/div/button[2]"

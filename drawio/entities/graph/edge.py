@@ -1,5 +1,8 @@
 import typing
 
+if typing.TYPE_CHECKING:
+    from .node import Node
+
 
 class Edge:
     def __init__(self, parent: "Node", child: "Node", label=None):
