@@ -1,6 +1,6 @@
 from glob import glob
 
-from diagrams.entities.drawio import DrawIO
+from drawio.entities.drawio import DrawIO
 import pywinauto
 
 
@@ -12,7 +12,7 @@ class DrawIOApp(DrawIO):
         super().__init__()
 
     def find_drawio_app_window(self):
-        windows = pywinauto.findwindows.find_windows(title_re=".*diagrams.*")
+        windows = pywinauto.findwindows.find_windows(title_re=".*drawio.*")
         if not windows:
             return None
         return pywinauto.Desktop(backend="uia").window(handle=windows[0])

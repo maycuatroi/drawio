@@ -1,4 +1,4 @@
-from diagrams.entities.drawio_config.drawio_config import DrawIOConfig
+from drawio.entities.drawio_config.drawio_config import DrawIOConfig
 
 DRAWIO_SHAPES = {
     "function": "mxgraph.dfd.start",

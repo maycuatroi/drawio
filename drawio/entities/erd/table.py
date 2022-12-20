@@ -1,8 +1,8 @@
 #  Author: Nguyen Anh Binh - Binhna1
 #  Created date:  2022 - 12 - 12
 
-from diagrams.entities.erd.column import Column
-from diagrams.entities.graph.node import Node
+from drawio.entities.erd.column import Column
+from drawio.entities.graph.node import Node
 
 
 class Table(Node):

@@ -1,6 +1,6 @@
 import abc
 
-from diagrams.entities.graph import Graph
+from drawio.entities.graph import Graph
 
 
 class DrawIO:

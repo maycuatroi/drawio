@@ -2,8 +2,8 @@ import typing
 
 from shortuuid import uuid
 
-from diagrams.entities import config
-from diagrams.entities.graph.edge import Edge
+from drawio.entities import config
+from drawio.entities.graph.edge import Edge
 
 
 class Node:

@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from diagrams.entities.drawio import DrawIO
+from drawio.entities.drawio import DrawIO
 
 
 class DrawIOBrowser(DrawIO):
@@ -22,7 +22,7 @@ class DrawIOBrowser(DrawIO):
 
     def _open(self):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
-        self.driver.get("https://app.diagrams.net/")
+        self.driver.get("https://app.drawio.net/")
         # wait to load span Decide later
         decide_later_node = WebDriverWait(self.driver, 5).until(
             lambda driver: self.__find_decide_later()

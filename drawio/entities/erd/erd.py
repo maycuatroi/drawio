@@ -1,6 +1,6 @@
 import typing
 
-from diagrams.entities.erd.table import Table
+from drawio.entities.erd.table import Table
 
 
 class ERD:

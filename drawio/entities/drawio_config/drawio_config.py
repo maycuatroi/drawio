@@ -1,5 +1,5 @@
-from diagrams.entities.drawio_config.abstract_config import AbstractConfig
-from diagrams.entities.drawio_config.connect_config import ConnectConfig
+from drawio.entities.drawio_config.abstract_config import AbstractConfig
+from drawio.entities.drawio_config.connect_config import ConnectConfig
 
 
 class DrawIOConfig(AbstractConfig):
