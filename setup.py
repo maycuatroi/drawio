@@ -30,13 +30,13 @@ def read_requirements(path):
 
 
 setup(
-    name="drawio",
+    name="drawio-python",
     version=read("drawio", "VERSION"),
     description="Awesome drawio created by Nguyen Anh Binh",
     url="https://github.com/maycuatroi/drawio/",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
-    author="maycuatroi",
+    author="Nguyen Anh Binh",
     packages=find_packages(exclude=["tests", ".github"]),
     install_requires=read_requirements("requirements.txt"),
     entry_points={
