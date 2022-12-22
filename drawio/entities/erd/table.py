@@ -10,8 +10,8 @@ class Table(Node):
         super().__init__(table_name, shape="table")
         for i in range(len(columns)):
             col = columns[i]
-            if isinstance(col, list) or isinstance(col, tuple):
-                columns[i] = Column(col[0], col[1])
+            if isinstance(col, (list, tuple)):
+                columns[i] = Column(*col)
         self.columns = columns
 
     def to_drawio_text(self):
