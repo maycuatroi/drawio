@@ -1,7 +1,6 @@
 from drawio.entities.drawio_config.drawio_config import DrawIOConfig
 
 DRAWIO_SHAPES = {
-    "function": "mxgraph.dfd.start",
     "table": "mxgraph.dfd.data",
     "circle": "ellipse",
 }
@@ -118,13 +117,13 @@ class Graph:
             shape = DRAWIO_SHAPES.get(node.shape, node.shape)
 
             if not child_edges:
-                graph_string += f"{node.id},{node.name},,\n"
+                graph_string += (
+                    f"{node.id},{node.name},,,,{node.color},{node.bg_color}\n"
+                )
             else:
                 # "node_id", "label", "edge_label", "shape", 'input_node', 'output_node'
                 # TODO: handle edge labels here
-                graph_string += (
-                    f'{node.id},{node.name},,{shape},"{input_ids}","{output_ids}"\n'
-                )
+                graph_string += f'{node.id},{node.name},,{shape},"{input_ids}","{output_ids}",{node.color},{node.bg_color}\n'
 
         return graph_string
 

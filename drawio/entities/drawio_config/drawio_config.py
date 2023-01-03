@@ -21,6 +21,8 @@ class DrawIOConfig(AbstractConfig):
             "shape",
             "input_node",
             "output_node",
+            "color",
+            "bg_color",
         ]
         self.stylename = "shape"
         self.styles = {}

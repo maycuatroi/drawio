@@ -7,13 +7,14 @@ from drawio.entities.graph.edge import Edge
 
 
 class Node:
-    def __init__(self, name, shape="ellipse", color="black"):
+    def __init__(self, name, shape="ellipse", color="#00000"):
         self.name = name
         self.id = uuid()
         self.children = []
         self.parents = []
         self.shape = shape
         self.color = color
+        self.bg_color = "#ffffff".upper()
         self.graph = config.GLOBAL_GRAPH
 
     # overwrite >> function
@@ -90,3 +91,7 @@ class Node:
                 return edge
 
         return None
+
+    def set_color(self, color, bg_color):
+        self.color = color
+        self.bg_color = bg_color
