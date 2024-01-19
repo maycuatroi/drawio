@@ -6,7 +6,6 @@ import pywinauto
 
 class DrawIOApp(DrawIO):
     def __init__(self):
-
         self.window = self.find_drawio_app_window()
         self.hw = self.window.handle
         super().__init__()

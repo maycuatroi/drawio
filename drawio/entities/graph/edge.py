@@ -6,7 +6,6 @@ if typing.TYPE_CHECKING:
 
 class Edge:
     def __init__(self, parent: "Node", child: typing.Union["Node", None], label=None):
-
         self.label = label
         self.parent = parent
         self.child = child
@@ -26,7 +25,6 @@ class Edge:
             return f"{self.parent.name}-->{self.child.name}"
 
     def __eq__(self, other):
-
         child_name = self.child.name if self.child else None
         other_child_name = other.child.name if other.child else None
         parent_name = self.parent.name if self.parent else None

@@ -3,6 +3,7 @@ from time import sleep
 
 from selenium import webdriver
 from selenium.common import NoSuchElementException
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
@@ -28,7 +29,8 @@ class DrawIOBrowser(DrawIO):
             browser_user_dir = os.path.join(os.environ["HOME"], ".drawio")
         options = webdriver.ChromeOptions()
         options.add_argument(f"--user-data-dir={browser_user_dir}")
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        service = Service(executable_path=ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.get("https://app.diagrams.net/")
         # wait to load span Decide later
         try:
