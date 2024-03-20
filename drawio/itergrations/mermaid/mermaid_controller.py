@@ -1,4 +1,5 @@
 import re
+import typing
 
 from drawio.entities.base_entity import BaseEntity
 from drawio.entities.graph.graph import Graph
@@ -65,8 +66,17 @@ class MermaidController(BaseEntity):
             normalized_data = normalized_data.replace(node.name, "")
             # remove all open and close brackets
             # Brackes: (, ), [, ], {, }, ((, )), [[, ]], {{, }}, (((, ))), [[[, ]]], {{{, }}}, [(, )],
-            regex = r"(\(|\)|\[|\]|\{|\}|\(\(|\)\)|\[\[|\]\]|\{\{|\}\}|\(\(\(|\)\)\)|\[\[\[|\]\]\]|\{\{\{|\}\}\}|\(\[|\)\])"
-            normalized_data = re.sub(regex, "", normalized_data)
+            brackets_open = ["(", "[", "{"]
+            brackets_close = [")", "]", "}"]
+            target_open = "["
+            target_close = "]"
+            for is_open, brackets in [(True, brackets_open), (False, brackets_close)]:
+                brackets_combination = self.__combination(brackets, 3)
+                for bracket in brackets_combination:
+                    target = target_open if is_open else target_close
+                    normalized_data = normalized_data.replace(bracket, target)
+
+        # remove all arrows
         normalized_data = normalized_data.replace(" ", "")
 
         self.log(f"Normalized data:\n{normalized_data}")
@@ -101,3 +111,11 @@ class MermaidController(BaseEntity):
             node_shape = "diamond"
             node_label = node_label[1:-1]
         return node_shape, node_label
+
+    def __combination(self, brackets: typing.List[str], count_max):
+        result = []
+        for i in range(1, count_max + 1):
+            for j in range(0, len(brackets)):
+                result.append(brackets[j] * i)
+        print(result)
+        return result
