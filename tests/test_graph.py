@@ -1,4 +1,5 @@
-from drawio import Graph, Node
+from drawio.entities.graph.graph import Graph
+from drawio.entities.graph.node import Node
 
 
 def test_graph():
