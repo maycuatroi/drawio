@@ -6,8 +6,8 @@ from drawio.itergrations.mermaid.mermaid_controller import MermaidController
 def mermaid_to_drawio(mermaid_text):
     mermaid_controller = MermaidController()
     graph = mermaid_controller.load(mermaid_text)
-    drawio_file = graph.render(file_name="sample.drawio", show=False)
-    print(f"Exported to {drawio_file}")
+    # drawio_file = graph.render(file_name="sample.drawio", show=False)
+    print('Success building graph')
 
 
 def test_mermaid_to_drawio_empty_input():

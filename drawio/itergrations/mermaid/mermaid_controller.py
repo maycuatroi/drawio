@@ -117,5 +117,4 @@ class MermaidController(BaseEntity):
         for i in range(1, count_max + 1):
             for j in range(0, len(brackets)):
                 result.append(brackets[j] * i)
-        print(result)
         return result
