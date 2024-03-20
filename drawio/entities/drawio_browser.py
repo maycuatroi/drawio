@@ -1,3 +1,4 @@
+import glob
 import os
 from time import sleep
 
@@ -27,10 +28,28 @@ class DrawIOBrowser(DrawIO):
             browser_user_dir = os.path.join(os.environ["LOCALAPPDATA"], "drawio")
         else:
             browser_user_dir = os.path.join(os.environ["HOME"], ".drawio")
+        self.download_directory = os.path.join(browser_user_dir, "download")
+        self.clear_all_files(self.download_directory)
+
         options = webdriver.ChromeOptions()
         options.add_argument(f"--user-data-dir={browser_user_dir}")
+        options.add_experimental_option(
+            "prefs", {"download.default_directory": self.download_directory}
+        )
+
+        options.add_argument("--disable-infobars")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--window-size=1920,1080")
+
         service = Service(executable_path=ChromeDriverManager().install())
+        if self.hide:
+            options.add_argument("--headless")
+
         self.driver = webdriver.Chrome(service=service, options=options)
+
         self.driver.get("https://app.diagrams.net/")
         # wait to load span Decide later
         try:
@@ -134,8 +153,10 @@ class DrawIOBrowser(DrawIO):
         self.driver.execute_script(script)
         self.click_button("Import")
 
-    def __init__(self):
+    def __init__(self, hide=True):
         self.driver = None
+        self.download_directory = None
+        self.hide = hide
         super().__init__()
 
     def render_text(self, text, render_style: str = "list"):
@@ -155,8 +176,10 @@ class DrawIOBrowser(DrawIO):
             By.XPATH, "/html/body/div[11]/div/button[2]"
         ).click()  # Import
 
-    def render(self, draw_io_string):
+    def render(self, draw_io_string, graph_name: str = None):
         first_line = draw_io_string.splitlines()[0]
+        self.set_name(graph_name)
+
         if "type:csv" in first_line:
             self.render_csv(draw_io_string)
         elif "type:text" in first_line:
@@ -164,3 +187,46 @@ class DrawIOBrowser(DrawIO):
 
     def click_copy(self):
         self.click_menu_item("Edit", "Copy")
+
+    def export(self, output_file: str):
+        """
+        Export the current graph to a .drawio file
+
+        Args:
+            output_file (str): The path to the output file.
+        """
+        self.click_menu_item("File", "Save As...")
+
+        option_element = self.driver.find_element(
+            By.XPATH, "//option[@title='Download']"
+        )
+        option_element.click()
+        self.click_button("OK")
+
+        for i in range(10):
+            downloaded_files = glob.glob(f"{self.download_directory}/*.drawio")
+            if len(downloaded_files) > 0:
+                downloaded_file = downloaded_files[0]
+                break
+            sleep(1)
+        else:
+            raise FileNotFoundError("Downloaded file not found")
+        # move file to output file
+        output_file = os.path.abspath(output_file)
+        data = open(downloaded_file, "rb").read()
+        open(output_file, "wb").write(data)
+        return output_file
+
+    def set_name(self, graph_name):
+        x_path = "/html/body/div[1]/div[2]/a"  # title
+        # click
+        self.driver.find_element(By.XPATH, x_path).click()
+        dialog_element = self.driver.find_element(By.CLASS_NAME, "geDialog")
+        input_element = dialog_element.find_element(By.TAG_NAME, "input")
+        input_element.clear()
+        input_element.send_keys(graph_name)
+        self.click_button("Rename")
+
+    def clear_all_files(self, download_directory):
+        for file in os.listdir(download_directory):
+            os.remove(os.path.join(download_directory, file))

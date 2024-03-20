@@ -7,6 +7,13 @@ mermaid_text = """flowchart TD
     C -->|Two| E[iPhone]
     C -->|Three| F[fa:fa-car Car]"""
 
-mermaid_controller = MermaidController()
-graph = mermaid_controller.load(mermaid_text)
-df_file = graph.render(file_name="sample.pdf", show=True)
+
+def mermaid_to_drawio(mermaid_text):
+    mermaid_controller = MermaidController()
+    graph = mermaid_controller.load(mermaid_text)
+    drawio_file = graph.render(file_name="sample.drawio", show=False)
+    print(f"Exported to {drawio_file}")
+
+
+if __name__ == "__main__":
+    mermaid_to_drawio(mermaid_text)

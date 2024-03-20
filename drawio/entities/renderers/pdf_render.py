@@ -29,7 +29,10 @@ class PDFRender(BaseRender):
 
         for edge in graph.edges:
             visual_graph.edge(
-                tail_name = edge.parent.id,head_name= edge.child.id, label=edge.label, color="red"
+                tail_name=edge.parent.id,
+                head_name=edge.child.id,
+                label=edge.label,
+                color="red",
             )
 
         output_file_name = output_file.split(".")[0]

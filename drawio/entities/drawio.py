@@ -1,6 +1,8 @@
 import abc
+import typing
 
-from drawio.entities.graph import Graph
+if typing.TYPE_CHECKING:
+    from drawio.entities.graph.graph import Graph
 
 
 class DrawIO:
@@ -16,7 +18,7 @@ class DrawIO:
     def _open(self):
         pass
 
-    def show(self, g: Graph):
+    def show(self, g: "Graph"):
         pass
 
     @abc.abstractmethod

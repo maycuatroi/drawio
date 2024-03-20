@@ -57,10 +57,24 @@ class MermaidController(BaseEntity):
             node = Node(id=node_id, name=node_label, shape=node_shape)
             graph.add_node(node)
 
+        # simple data
+        normalized_data = self.__data
+
+        for node in graph.nodes:
+            # remove node_name and keep only node id in data
+            normalized_data = normalized_data.replace(node.name, "")
+            # remove all open and close brackets
+            # Brackes: (, ), [, ], {, }, ((, )), [[, ]], {{, }}, (((, ))), [[[, ]]], {{{, }}}, [(, )],
+            regex = r"(\(|\)|\[|\]|\{|\}|\(\(|\)\)|\[\[|\]\]|\{\{|\}\}|\(\(\(|\)\)\)|\[\[\[|\]\]\]|\{\{\{|\}\}\}|\(\[|\)\])"
+            normalized_data = re.sub(regex, "", normalized_data)
+        normalized_data = normalized_data.replace(" ", "")
+
+        self.log(f"Normalized data:\n{normalized_data}")
+
         # get edges and labels using regex
         regex = r"([A-Za-z0-9]+)\s*-->\s*(?:\|([^|]+)\|\s*)?([A-Za-z0-9]+)"
 
-        matches = re.findall(regex, self.__data)
+        matches = re.findall(regex, normalized_data)
         for match in matches:
             parent_id = match[0]
             child_id = match[2]

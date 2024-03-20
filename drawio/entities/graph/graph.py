@@ -160,7 +160,8 @@ class Graph(BaseEntity):
         from drawio.entities.renderers import renderers
 
         file_type = file_name.split(".")[-1]
-        renderer = renderers.get(file_type)()
+        renderer = renderers.get(file_type)
         if renderer is None:
             raise NotImplementedError(f"File type '{file_type}' is not supported.")
+        renderer = renderer()
         return renderer.render(graph=self, output_file=file_name, show=show)

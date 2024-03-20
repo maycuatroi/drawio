@@ -12,7 +12,7 @@ class BaseRender(BaseEntity):
         self.show = False
 
     @abc.abstractmethod
-    def _render(self, graph: "Graph", output_file: str):
+    def _render(self, graph: "Graph", output_file: str, show: bool = False):
         raise NotImplementedError
 
     def render(
@@ -21,6 +21,6 @@ class BaseRender(BaseEntity):
         output_file = output_file or f"{graph.name}.{self.file_type}"
         self.log(f"Rendering {self.file_type} file")
         self.show = show
-        output_file_name = self._render(graph, output_file=output_file)
+        output_file_name = self._render(graph, output_file=output_file, show=show)
         self.log(f"Rendered {self.file_type} file")
         return output_file_name
