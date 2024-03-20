@@ -29,6 +29,8 @@ class DrawIOBrowser(DrawIO):
         else:
             browser_user_dir = os.path.join(os.environ["HOME"], ".drawio")
         self.download_directory = os.path.join(browser_user_dir, "download")
+        if not os.path.exists(self.download_directory):
+            os.makedirs(self.download_directory)
         self.clear_all_files(self.download_directory)
 
         options = webdriver.ChromeOptions()
