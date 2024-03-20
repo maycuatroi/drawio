@@ -9,6 +9,13 @@ Drawio-python is available on PyPI. To install it, run the following command:
 pip install drawio-python
 ```
 
-# Usage
 
-TODO: Add usage examples
+# Usage
+- Install lib and check samples under [examples](examples) folder
+
+# Mermaid Support
+- flowchart
+
+# Renderer
+- drawio
+- pdf

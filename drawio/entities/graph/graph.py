@@ -1,4 +1,11 @@
+import typing
+
+from drawio.entities.base_entity import BaseEntity
 from drawio.entities.drawio_config.drawio_config import DrawIOConfig
+
+if typing.TYPE_CHECKING:
+    from drawio.entities.graph.node import Node
+    from drawio.entities.renderers.base_render import BaseRender
 
 DRAWIO_SHAPES = {
     "table": "mxgraph.dfd.data",
@@ -6,13 +13,16 @@ DRAWIO_SHAPES = {
 }
 
 
-class Graph:
-    def __init__(self, single_node=None):
+class Graph(BaseEntity):
+    def __init__(self, single_node=None, graph_type="flowchart", name=None):
+        super().__init__()
+        self.name = name or "Graph Name"
+        self.graph_type = graph_type
         if single_node is not None:
             single_node.graph = self
             self.nodes = [single_node]
         else:
-            self.nodes = []
+            self.nodes: typing.List["Node"] = []
         self.edges = []
 
     def add_nodes(self, nodes):
@@ -135,3 +145,24 @@ class Graph:
         node.graph = self
         if node not in self.nodes:
             self.nodes.append(node)
+
+    def get_node(self, node_id):
+        for node in self.nodes:
+            if node.id == node_id:
+                return node
+        else:
+            self.log(
+                f"Node with id {node_id} not found in graph"
+                f"Valid node ids are: {', '.join([node.id for node in self.nodes])}"
+            )
+        return None
+
+    def render(self, file_name: str, show: bool = False) -> str:
+        from drawio.entities.renderers import renderers
+
+        file_type = file_name.split(".")[-1]
+        renderer_class: typing.Optional[type[BaseRender]] = renderers.get(file_type)
+        if renderer_class is None:
+            raise NotImplementedError(f"File type '{file_type}' is not supported.")
+        renderer = renderer_class()
+        return renderer.render(graph=self, output_file=file_name, show=show)

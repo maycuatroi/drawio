@@ -1,4 +1,5 @@
 """Python setup.py for drawio package"""
+
 import io
 import os
 from setuptools import find_packages, setup

@@ -7,9 +7,9 @@ from drawio.entities.graph.edge import Edge
 
 
 class Node:
-    def __init__(self, name, shape="ellipse", color="#00000"):
+    def __init__(self, name, id=None, shape="ellipse", color="#00000"):
         self.name = name
-        self.id = uuid()
+        self.id = id or uuid()
         self.children = []
         self.parents = []
         self.shape = shape
@@ -74,10 +74,10 @@ class Node:
         return parent_edge
 
     def __str__(self):
-        return self.name
+        return f"[{self.id}] - {self.name}"
 
     def __repr__(self):
-        return self.name
+        return f"[{self.id}] - {self.name}"
 
     def get_neighbours(self):
         parent_nodes = [edge.parent for edge in self.parents]
