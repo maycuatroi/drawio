@@ -18,11 +18,11 @@ def test_mermaid_to_drawio_empty_input():
 
 def test_mermaid_to_drawio_valid_input():
     mermaid_text = """
-    graph TD
-    A[Christmas] -->|Get money| B(Go shopping)
+    flowchart TD
+    A[Christmas] -->|Get money| B((Go shopping))
     B --> C{Let me think}
-    C -->|One| D[Laptop]
-    C -->|Two| E[iPhone]
+    C --> D[Laptop]
+    C --|Two|--> E[iPhone]
     C -->|Three| F[fa:fa-car Car]
     """
     mermaid_to_drawio(mermaid_text)
