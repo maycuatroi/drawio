@@ -1,4 +1,5 @@
 import typing
+
 from shortuuid import uuid
 
 from drawio.entities import config
@@ -6,7 +7,7 @@ from drawio.entities.graph.edge import Edge
 
 
 class Node:
-    def __init__(self, id, name, shape="ellipse", color="#00000"):
+    def __init__(self, name, id=None, shape="ellipse", color="#00000"):
         self.name = name
         self.id = id or uuid()
         self.children = []
