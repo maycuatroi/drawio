@@ -1,4 +1,3 @@
 shortuuid
 selenium
 webdriver-manager
-pygraphviz
