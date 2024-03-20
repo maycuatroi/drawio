@@ -1,13 +1,19 @@
 import re
 
-import graphviz
-
 from drawio.entities.graph.graph import Graph
 from drawio.entities.renderers.base_render import BaseRender
+
+try:
+    import graphviz
+except ImportError:
+    pass
 
 
 class PDFRender(BaseRender):
     file_type = "pdf"
+
+    def __init__(self):
+        super().__init__()
 
     def _render(self, graph: "Graph", output_file: str, show: bool = False):
         """Render to pdf using pygraphviz"""
