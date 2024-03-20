@@ -38,7 +38,7 @@ class DrawIOBrowser(DrawIO):
                 lambda driver: self.__find_decide_later()
             )
             decide_later_node.click()
-        except Exception as e:
+        except Exception:
             self.clear_canvas()
 
     def __click_menu(self, button_name):

@@ -16,4 +16,4 @@ def test_graph():
     node_c >> "Two" >> node_e
     node_c >> "Three" >> node_f
 
-    csv_string = graph.to_draw_io_csv()
+    graph.to_draw_io_csv()
