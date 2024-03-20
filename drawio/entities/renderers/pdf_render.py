@@ -9,7 +9,7 @@ from drawio.entities.renderers.base_render import BaseRender
 class PDFRender(BaseRender):
     file_type = "pdf"
 
-    def _render(self, graph: "Graph", output_file: str):
+    def _render(self, graph: "Graph", output_file: str, show: bool = False):
         """Render to pdf using pygraphviz"""
 
         visual_graph = graphviz.Digraph(

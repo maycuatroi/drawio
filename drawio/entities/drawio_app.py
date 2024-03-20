@@ -32,9 +32,6 @@ class DrawIOApp(DrawIO):
         pywinauto.application.Application().start(path)
 
     def render_csv(self, csv_string):
-        # window to top
-        # self.window.set_focus()
-        # print control
         self.window.print_control_identifiers()
 
         # find "Insert (Doubleclick to insert text)"

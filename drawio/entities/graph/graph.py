@@ -5,6 +5,7 @@ from drawio.entities.drawio_config.drawio_config import DrawIOConfig
 
 if typing.TYPE_CHECKING:
     from drawio.entities.graph.node import Node
+    from drawio.entities.renderers.base_render import BaseRender
 
 DRAWIO_SHAPES = {
     "table": "mxgraph.dfd.data",
@@ -160,8 +161,8 @@ class Graph(BaseEntity):
         from drawio.entities.renderers import renderers
 
         file_type = file_name.split(".")[-1]
-        renderer = renderers.get(file_type)
-        if renderer is None:
+        renderer_class: typing.Optional[type[BaseRender]] = renderers.get(file_type)
+        if renderer_class is None:
             raise NotImplementedError(f"File type '{file_type}' is not supported.")
-        renderer = renderer()
+        renderer = renderer_class()
         return renderer.render(graph=self, output_file=file_name, show=show)

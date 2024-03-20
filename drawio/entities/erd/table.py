@@ -7,7 +7,7 @@ from drawio.entities.graph.node import Node
 
 class Table(Node):
     def __init__(self, table_name: str, columns):
-        super().__init__(table_name, shape="table")
+        super().__init__(id=table_name, name=table_name, shape="table")
         for i in range(len(columns)):
             col = columns[i]
             if isinstance(col, (list, tuple)):

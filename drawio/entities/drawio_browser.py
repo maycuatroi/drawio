@@ -176,7 +176,7 @@ class DrawIOBrowser(DrawIO):
             By.XPATH, "/html/body/div[11]/div/button[2]"
         ).click()  # Import
 
-    def render(self, draw_io_string, graph_name: str = None):
+    def render(self, draw_io_string, graph_name: str = "Untitled Graph"):
         first_line = draw_io_string.splitlines()[0]
         self.set_name(graph_name)
 

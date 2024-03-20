@@ -5,7 +5,7 @@ from drawio.entities.graph.graph import Graph
 
 
 class BaseRender(BaseEntity):
-    file_type = None
+    file_type: str = "#UNDEFINED#"
 
     def __init__(self):
         super().__init__()
@@ -15,9 +15,7 @@ class BaseRender(BaseEntity):
     def _render(self, graph: "Graph", output_file: str, show: bool = False):
         raise NotImplementedError
 
-    def render(
-        self, graph: "Graph", output_file: str = None, show: bool = False
-    ) -> str:
+    def render(self, graph: "Graph", output_file: str = "", show: bool = False) -> str:
         output_file = output_file or f"{graph.name}.{self.file_type}"
         self.log(f"Rendering {self.file_type} file")
         self.show = show

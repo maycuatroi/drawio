@@ -8,7 +8,7 @@ class DrawIORender(BaseRender):
 
     def _render(self, graph: "Graph", output_file: str, show: bool = False):
         csv_string = graph.to_draw_io_csv()
-        print(csv_string)
+        self.log(csv_string)
         drawio_browser = DrawIOBrowser(hide=not show)
         drawio_browser.render(draw_io_string=csv_string, graph_name=graph.name)
         # export to file
