@@ -27,9 +27,7 @@ class MermaidController(BaseEntity):
         first_line = self.__data.split("\n")[0]
         self.__graph_type = first_line.split(" ")[0].lower()
         if self.__graph_type not in self.valid_graph_types:
-            raise NotImplementedError(
-                f"Graph type '{self.__graph_type}' is not supported."
-            )
+            raise NotImplementedError(f"Graph type '{self.__graph_type}' is not supported.")
         return self.__graph_type
 
     def __build_flow_chart(self) -> "Graph":
@@ -82,9 +80,11 @@ class MermaidController(BaseEntity):
         self.log(f"Normalized data:\n{normalized_data}")
 
         # get edges and labels using regex
-        regex = r"([A-Za-z0-9]+)\s*-->\s*(?:\|([^|]+)\|\s*)?([A-Za-z0-9]+)"
+        regex_1 = r"([A-Za-z0-9]+)\s*-->\s*(?:\|([^|]+)\|\s*)?([A-Za-z0-9]+)"
+        regex_2 = r"([A-Za-z0-9]+)\[\]\s*-->\s*(?:\|([^|]+)\|\s*)?([A-Za-z0-9]+)\[\]"
 
-        matches = re.findall(regex, normalized_data)
+        matches = re.findall(regex_1, normalized_data) + re.findall(regex_2, normalized_data)
+        matches = list(set(matches))
         for match in matches:
             parent_id = match[0]
             child_id = match[2]
@@ -93,9 +93,10 @@ class MermaidController(BaseEntity):
             child_node = graph.get_node(child_id)
             if label:
                 edge = parent_node >> label >> child_node
+                self.log(f"Adding edge: '{parent_node.name}' -> '{child_node.name}' with label '{label}'")
             else:
                 edge = parent_node >> child_node
-            self.log(f"Adding edge: {edge}")
+                self.log(f"Adding edge: '{parent_node.name}' -> '{child_node.name}'")
         return graph
 
     def __extract_node_shape(self, node_label):
