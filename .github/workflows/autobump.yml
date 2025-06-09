@@ -1,0 +1,41 @@
+name: Auto Bump Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-version:
+    if: github.actor != 'github-actions'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Bump patch version
+        id: bump
+        run: |
+          version=$(cat drawio/VERSION)
+          echo "Current version: $version"
+          IFS='.' read -r major minor patch <<< "$version"
+          patch=$((patch+1))
+          new_version="$major.$minor.$patch"
+          echo "$new_version" > drawio/VERSION
+          echo "new_version=$new_version" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and tag
+        run: |
+          git add drawio/VERSION
+          git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }}"
+          git tag ${{ steps.bump.outputs.new_version }}
+          git push origin HEAD
+          git push origin ${{ steps.bump.outputs.new_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
